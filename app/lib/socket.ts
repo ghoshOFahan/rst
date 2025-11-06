@@ -1,8 +1,8 @@
-import dotenv from "dotenv";
-import { io } from "socket.io-client";
-dotenv.config({ path: "../../.env" });
-const backend_url = process.env.BACKEND_URL ?? undefined;
-if (typeof backend_url === "undefined") {
-  console.log("error in finding backend url");
+import { io, Socket } from "socket.io-client";
+const backend_url = process.env.NEXT_PUBLIC_BACKEND_URL;
+console.log(backend_url);
+if (!backend_url) {
+  console.error("Backend url is not defined");
 }
-io(backend_url, { autoConnect: false });
+const socket: Socket = io(backend_url, { autoConnect: false });
+export default socket;
