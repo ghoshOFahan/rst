@@ -4,5 +4,6 @@ console.log(backend_url);
 if (!backend_url) {
   console.error("Backend url is not defined");
 }
-const socket: Socket = io(backend_url, { autoConnect: false });
+const socket: Socket = io(backend_url, { transports: ["websocket"] });
+
 export default socket;

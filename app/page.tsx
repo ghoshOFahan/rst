@@ -2,24 +2,62 @@
 
 import ThemeToggle from "./components/ThemeToggle";
 import ModeToggle from "./components/ModeToggle";
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import socket from "./lib/socket";
+import { userGamestore } from "./store/userGamestore";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { motion, AnimatePresence, Variants } from "framer-motion";
 
 export default function Home() {
   const [mode, setMode] = useState("create");
+  const [username, SetUsername] = useState("");
+  const [maxPlayers, SetMaxPlayers] = useState<number>(2);
+  const [roomId, SetRoomId] = useState("");
+  const { gameState, setGameState, gameError, setGameError } = userGamestore();
+  const router = useRouter();
 
-  const cardVariants = {
+  useEffect(() => {
+    socket.on("gameStateUpdate", (state) => {
+      setGameState(state);
+      console.log(state.players);
+    });
+    return () => {
+      socket.off("gameStateUpdate");
+    };
+  }, [setGameState]);
+
+  useEffect(() => {
+    if (gameState?.roomId) {
+      router.push(`/${gameState.roomId}`);
+    }
+  }, [gameState, router]);
+
+  const handleCreateRoom = () => {
+    if (!username) return;
+    if (socket && socket.id) {
+      localStorage.setItem("lastSocketId", socket.id);
+    }
+    socket.emit("createRoom", { username, maxPlayers });
+  };
+
+  const handleJoinRoom = () => {
+    if (!username || !roomId) return;
+    if (socket.emit("joinRoom", { username, roomId })) {
+    }
+  };
+
+  const cardVariants: Variants = {
     initial: {
       opacity: 0,
       x: mode === "join" ? -30 : 30,
-      scale: 0.98, // Subtle scale
+      scale: 0.98,
     },
     animate: {
       opacity: 1,
       x: 0,
       scale: 1,
       transition: {
-        duration: 0.25, // Fast!
+        duration: 0.25,
         ease: [0.25, 0.1, 0.25, 1],
       },
     },
@@ -63,6 +101,8 @@ export default function Home() {
                   Username
                 </label>
                 <input
+                  value={username}
+                  onChange={(e) => SetUsername(e.target.value)}
                   className="w-full bg-transparent border-b border-(--color-comment) focus:border-(--color-green) text-(--color-fg) py-2 outline-none placeholder-(--color-comment) transition-colors duration-200"
                   placeholder="Enter your username"
                 />
@@ -72,11 +112,14 @@ export default function Home() {
                   Room Id
                 </label>
                 <input
+                  value={roomId}
+                  onChange={(e) => SetRoomId(e.target.value)}
                   className="w-full bg-transparent border-b border-(--color-comment) focus:border-(--color-pink) text-(--color-fg) py-2 outline-none placeholder-(--color-comment) transition-colors duration-200"
                   placeholder="Enter Room Id"
                 />
               </div>
               <motion.button
+                onClick={handleJoinRoom}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 transition={{ duration: 0.15 }}
@@ -104,6 +147,8 @@ export default function Home() {
                   Username
                 </label>
                 <input
+                  value={username}
+                  onChange={(e) => SetUsername(e.target.value)}
                   className="w-full bg-transparent border-b border-(--color-comment) focus:border-(--color-green) text-(--color-fg) py-2 outline-none placeholder-(--color-comment) transition-colors duration-200"
                   placeholder="Enter your username"
                 />
@@ -113,11 +158,15 @@ export default function Home() {
                   Max Players
                 </label>
                 <input
+                  type="number"
+                  value={maxPlayers}
+                  onChange={(e) => SetMaxPlayers(Number(e.target.value))}
                   className="w-full bg-transparent border-b border-(--color-comment) focus:border-(--color-pink) text-(--color-fg) py-2 outline-none placeholder-(--color-comment) transition-colors duration-200"
                   placeholder="Max number of RST buddies"
                 />
               </div>
               <motion.button
+                onClick={handleCreateRoom}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 transition={{ duration: 0.15 }}
