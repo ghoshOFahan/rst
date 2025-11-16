@@ -8,14 +8,33 @@ import type { GameState } from "../types/game";
 export default function RoomPage() {
   const { gameState, setGameState } = userGamestore();
   useEffect(() => {
-    const handleGameStateUpdate = (state: GameState) => setGameState(state);
+    const handleGameStateUpdate = (state: GameState) => {
+      setGameState(state);
+      localStorage.setItem("lastRoomId", state.roomId);
+      if (socket && socket.id) {
+        localStorage.setItem("lastSocketId", socket.id);
+      }
+    };
 
     socket.on("gameStateUpdate", handleGameStateUpdate);
+    socket.on("gameError", (err) => console.error("Game error:", err));
 
     return () => {
       socket.off("gameStateUpdate", handleGameStateUpdate);
+      socket.off("gameError");
     };
   }, [setGameState]);
+
+  useEffect(() => {
+    const lastSocketId = localStorage.getItem("lastSocketId");
+    const lastRoomId = localStorage.getItem("lastRoomId");
+
+    // reconnect only if we have no gameState and have saved info
+    if (!gameState && lastSocketId && lastRoomId) {
+      console.log("Attempting reconnection...");
+      socket.emit("reconnectRoom", lastSocketId);
+    }
+  }, [gameState]);
 
   if (!gameState)
     return (

@@ -3,6 +3,7 @@
 import ThemeToggle from "./components/ThemeToggle";
 import ModeToggle from "./components/ModeToggle";
 import socket from "./lib/socket";
+import type { GameState } from "./types/game";
 import { userGamestore } from "./store/userGamestore";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
@@ -13,19 +14,58 @@ export default function Home() {
   const [username, SetUsername] = useState("");
   const [maxPlayers, SetMaxPlayers] = useState<number>(2);
   const [roomId, SetRoomId] = useState("");
-  const { gameState, setGameState, gameError, setGameError } = userGamestore();
+  const { gameState, setGameState } = userGamestore();
   const router = useRouter();
 
   useEffect(() => {
-    socket.on("gameStateUpdate", (state) => {
+    // Define the handler inside the effect
+    const handler = (state: GameState) => {
       setGameState(state);
-      console.log(state.players);
-    });
+      if (state.roomId) {
+        localStorage.setItem("lastRoomId", state.roomId);
+      }
+      if (socket && socket.id) {
+        localStorage.setItem("lastSocketId", socket.id);
+      }
+    };
+
+    const errorHandler = (err: string) => {
+      console.error("Game error:", err);
+    };
+
+    // Add event listeners
+    socket.on("gameStateUpdate", handler);
+    socket.on("gameError", errorHandler);
+
     return () => {
-      socket.off("gameStateUpdate");
+      socket.off("gameStateUpdate", handler);
+
+      socket.off("gameError");
     };
   }, [setGameState]);
 
+  // Reconnect properly when socket connects again
+  useEffect(() => {
+    const lastSocketId = localStorage.getItem("lastSocketId");
+    const lastRoomId = localStorage.getItem("lastRoomId");
+
+    const onConnect = () => {
+      //  no active gameState exists AND we have stored IDs
+      // This prevents attempting reconnection if the game is already active in this session
+      if (!gameState && lastSocketId && lastRoomId) {
+        console.log(
+          "Socket connected and requesting reconnection for socketID:",
+          lastSocketId
+        );
+        socket.emit("reconnectRoom", lastSocketId);
+      }
+    };
+
+    socket.on("connect", onConnect);
+    return () => {
+      socket.off("connect", onConnect);
+    };
+  }, [gameState]);
   useEffect(() => {
     if (gameState?.roomId) {
       router.push(`/${gameState.roomId}`);
@@ -36,6 +76,7 @@ export default function Home() {
     if (!username) return;
     if (socket && socket.id) {
       localStorage.setItem("lastSocketId", socket.id);
+      localStorage.setItem("lastRoomId", gameState?.roomId ?? roomId);
     }
     socket.emit("createRoom", { username, maxPlayers });
   };
