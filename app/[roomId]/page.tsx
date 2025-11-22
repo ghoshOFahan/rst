@@ -3,7 +3,7 @@ import socket from "../lib/socket";
 import WaitingLobby from "../components/WaitingLobby";
 import { userGamestore } from "../store/userGamestore";
 import { useEffect } from "react";
-import GameRoom from "../components/GameRoom";
+import GameRoom from "../components/room/GameRoom";
 import type { GameState } from "../types/game";
 export default function RoomPage() {
   const { gameState, setGameState } = userGamestore();

@@ -18,7 +18,6 @@ export default function Home() {
   const router = useRouter();
 
   useEffect(() => {
-    // Define the handler inside the effect
     const handler = (state: GameState) => {
       setGameState(state);
       if (state.roomId) {
@@ -44,14 +43,11 @@ export default function Home() {
     };
   }, [setGameState]);
 
-  // Reconnect properly when socket connects again
   useEffect(() => {
     const lastSocketId = localStorage.getItem("lastSocketId");
     const lastRoomId = localStorage.getItem("lastRoomId");
 
     const onConnect = () => {
-      //  no active gameState exists AND we have stored IDs
-      // This prevents attempting reconnection if the game is already active in this session
       if (!gameState && lastSocketId && lastRoomId) {
         console.log(
           "Socket connected and requesting reconnection for socketID:",
