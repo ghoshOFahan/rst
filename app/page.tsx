@@ -8,6 +8,7 @@ import { userGamestore } from "./store/userGamestore";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence, Variants } from "framer-motion";
+import { playClickSound } from "./components/ModeToggle";
 
 export default function Home() {
   const [mode, setMode] = useState("create");
@@ -194,12 +195,21 @@ export default function Home() {
                 <label className="text-(--color-comment) text-sm block mb-2">
                   Max Players
                 </label>
+                <span className=" text-(--color-fg) text-sm">
+                  Selected: {maxPlayers}
+                </span>
+
                 <input
-                  type="number"
+                  type="range"
+                  min={2}
+                  max={7}
+                  step={1}
                   value={maxPlayers}
-                  onChange={(e) => SetMaxPlayers(Number(e.target.value))}
+                  onChange={(e) => {
+                    SetMaxPlayers(Number(e.target.value));
+                    playClickSound("../sounds/slide sound.wav");
+                  }}
                   className="w-full bg-transparent border-b border-(--color-comment) focus:border-(--color-pink) text-(--color-fg) py-2 outline-none placeholder-(--color-comment) transition-colors duration-200"
-                  placeholder="Max number of RST buddies"
                 />
               </div>
               <motion.button
