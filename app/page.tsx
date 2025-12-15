@@ -9,7 +9,14 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence, Variants } from "framer-motion";
 import { playClickSound } from "./components/ModeToggle";
-
+const getClientId = () => {
+  let id = localStorage.getItem("clientId");
+  if (!id) {
+    id = `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
+    localStorage.setItem("clientId", id);
+  }
+  return id;
+};
 export default function Home() {
   const [mode, setMode] = useState("create");
   const [username, SetUsername] = useState("");
@@ -54,7 +61,10 @@ export default function Home() {
           "Socket connected and requesting reconnection for socketID:",
           lastSocketId
         );
-        socket.emit("reconnectRoom", lastSocketId);
+        socket.emit("reconnectRoom", {
+          roomId: lastRoomId,
+          clientId: getClientId(),
+        });
       }
     };
 
@@ -75,12 +85,16 @@ export default function Home() {
       localStorage.setItem("lastSocketId", socket.id);
       localStorage.setItem("lastRoomId", gameState?.roomId ?? roomId);
     }
-    socket.emit("createRoom", { username, maxPlayers });
+    socket.emit("createRoom", {
+      username,
+      maxPlayers,
+      clientId: getClientId(),
+    });
   };
 
   const handleJoinRoom = () => {
     if (!username || !roomId) return;
-    if (socket.emit("joinRoom", { username, roomId })) {
+    if (socket.emit("joinRoom", { username, roomId, getClientId })) {
     }
   };
 

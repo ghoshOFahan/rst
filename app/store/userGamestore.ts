@@ -3,7 +3,7 @@ import type { GameState } from "../types/game";
 interface GameStore {
   gameState: GameState | null;
   gameError: string | null;
-  setGameState: (state: GameState) => void;
+  setGameState: (state: GameState | null) => void;
   setGameError: (state: string) => void;
 }
 export const userGamestore = create<GameStore>((set) => ({
