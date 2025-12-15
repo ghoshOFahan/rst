@@ -34,9 +34,9 @@ export default function GameInput() {
   };
 
   return (
-    <div className="mt-8 flex gap-3">
+    <div className="mt-6 flex flex-col sm:flex-row gap-3 w-full max-w-md">
       <input
-        className={`border border-comment/50 rounded-lg bg-line px-3 py-2 text-fg w-64 focus:outline-none focus:border-purple transition-colors ${
+        className={`border border-comment/50 rounded-lg bg-line px-3 py-2 text-fg w-full focus:outline-none focus:border-purple transition-colors ${
           disabled ? "opacity-50 cursor-not-allowed" : ""
         }`}
         placeholder={

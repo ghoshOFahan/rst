@@ -16,7 +16,7 @@ export default function CurrentPlayerHighlight() {
   return (
     <div className="text-center mb-4">
       <p className="text-comment">Current Turn:</p>
-      <h2 className="text-3xl font-bold text-purple">
+      <h2 className="text-xl md:text-3xl font-bold text-purple text-center">
         {currentPlayer?.username ?? "Waiting..."}
       </h2>
     </div>

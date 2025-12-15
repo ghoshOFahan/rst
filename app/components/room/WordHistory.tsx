@@ -12,7 +12,7 @@ export default function WordHistory() {
         Word History
       </h3>
 
-      <ul className="list-none p-0 m-0 max-h-[200px] overflow-y-auto text-comment mt-4">
+      <ul className="list-none p-0 m-0 max-h-[180px] md:max-h-[340px] overflow-y-auto text-comment mt-4 space-y-1">
         {history.length === 0 && (
           <li className="italic text-comment">No words yet</li>
         )}

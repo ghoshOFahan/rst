@@ -98,7 +98,7 @@ export default function RoomPage() {
       return (
         <div className="relative w-full h-full">
           {isEliminated && (
-            <div className="fixed top-0 left-0 w-full h-16 bg-red-600/90 text-white z-50 flex items-center justify-center font-bold text-xl animate-pulse">
+            <div className="fixed top-0 left-0 w-full h-12 md:h-16 text-sm md:text-xl bg-red-600/90 text-white z-50 flex items-center justify-center font-bold animate-pulse">
               YOU HAVE BEEN DISQUALIFIED!
             </div>
           )}
