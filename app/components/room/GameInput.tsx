@@ -16,10 +16,41 @@ export default function GameInput() {
   const isAiThinking = gameState?.isAiThinking ?? false;
 
   const disabled = !isMyTurn || isAiThinking;
-
-  const handleSubmit = () => {
+  const wordCheck = (word: string) => {
+    word = word.trim().toLowerCase();
+    const hasTripleRepeat = /(.)\1{2,}/.test(word);
+    const hasNoVowels = !/^[^aeiouAEIOU]+$/.test(word);
+    if (
+      word.length > 15 ||
+      word.length < 3 ||
+      !/^[A-Za-z]+$/.test(word) ||
+      hasTripleRepeat ||
+      hasNoVowels
+    ) {
+      return false;
+    }
+    return true;
+  };
+  const dictCheck = async (word: string) => {
+    word = word.trim().toLowerCase();
+    const url = `https://api.dictionaryapi.dev/api/v2/entries/en/${word}`;
+    const response = await fetch(url);
+    if (!response.ok) {
+      return false;
+    }
+    return true;
+  };
+  const handleSubmit = async () => {
     if (!value.trim() || disabled || !gameState) return;
-
+    if (!wordCheck(value)) {
+      alert("Invalid word format");
+      return;
+    }
+    const exists = await dictCheck(value);
+    if (!exists) {
+      alert("Word not found in dictionary");
+      return;
+    }
     socket?.emit("submitWord", {
       roomId: gameState.roomId,
       word: value.trim(),
@@ -32,7 +63,6 @@ export default function GameInput() {
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter") handleSubmit();
   };
-
   return (
     <div className="mt-6 flex flex-col sm:flex-row gap-3 w-full max-w-md">
       <input
