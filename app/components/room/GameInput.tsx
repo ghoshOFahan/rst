@@ -19,7 +19,7 @@ export default function GameInput() {
   const wordCheck = (word: string) => {
     word = word.trim().toLowerCase();
     const hasTripleRepeat = /(.)\1{2,}/.test(word);
-    const hasNoVowels = !/^[^aeiouAEIOU]+$/.test(word);
+    const hasNoVowels = !/[aeiou]/i.test(word);
     if (
       word.length > 15 ||
       word.length < 3 ||
