@@ -36,10 +36,6 @@ export default function GameRoom() {
           <GameInput />
         </section>
       </main>
-
-      <div className="fixed bottom-6 left-6 bg-line text-fg font-bold w-10 h-10 flex items-center justify-center rounded-full border border-comment/50">
-        {roomId.slice(0, 1).toUpperCase()}
-      </div>
     </div>
   );
 }
