@@ -98,7 +98,9 @@ export default function Home() {
 
   const handleJoinRoom = () => {
     if (!username || !roomId) return;
-    if (socket.emit("joinRoom", { username, roomId, getClientId })) {
+    if (
+      socket.emit("joinRoom", { username, roomId, clientId: getClientId() })
+    ) {
     }
   };
 
