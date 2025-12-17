@@ -9,6 +9,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence, Variants } from "framer-motion";
 import { playClickSound } from "./components/ModeToggle";
+export const dynamic = "force-dynamic";
 const getClientId = () => {
   let id = localStorage.getItem("clientId");
   if (!id) {
