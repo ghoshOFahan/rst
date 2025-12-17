@@ -1,36 +1,123 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# RST – Real-Time Word Chain Game (Frontend)
 
-## Getting Started
+Repository: https://github.com/ghoshOFahan/rst  
+Live Deployment: https://rst.ahanghosh.site
 
-First, run the development server:
+---
+
+## @Overview
+
+RST is a real-time multiplayer word-chain game built with **Next.js (App Router)**.  
+The frontend handles user interaction, UI state, theming, and real-time communication with the backend server using Socket.IO.  
+All game authority, validation, and turn logic are enforced exclusively by the backend.
+
+---
+
+## @Tech Stack
+
+- Framework: Next.js (App Router)
+- Language: TypeScript
+- Styling: Tailwind CSS v4
+- State Management: Zustand
+- Real-Time Communication: Socket.IO Client
+- Animations: Framer Motion
+- Icons: Lucide React
+- Theme Management: next-themes
+- Analytics: @vercel/analytics
+- Deployment: Vercel
+
+---
+
+## @Architecture
+
+### @Socket Management
+The frontend uses a **Socket.IO Singleton pattern** to avoid connection floods and duplicate socket connections.  
+A global `SocketProvider` wraps the application and manages the socket lifecycle.
+
+### @Global State
+Zustand acts as the **single source of truth** for:
+- Game state
+- Current player turn
+- AI thinking state
+- Room lifecycle and transitions
+
+All UI updates are driven only by server-emitted events such as `gameStateUpdate`.
+
+---
+
+## @UI Flow
+
+### @Lobby Phase
+- Create a room or join using a Room ID
+- Display connected players
+- Automatically transition when server conditions are met
+
+### @Game Room Phase
+- Fully server-driven UI
+- Waiting, Playing, and Finished phases handled dynamically
+
+---
+
+## @GameInput Logic
+
+The input system is defensive and server-respecting:
+- Disabled when it is not the player’s turn
+- Disabled while AI evaluation is running
+- Protected against double submissions (Enter + Click)
+- Mobile-safe interaction handling
+
+The frontend never decides game outcomes.
+
+---
+
+## @Features
+
+- Real-time multiplayer gameplay
+- AI-driven word validation
+- Turn-based enforcement
+- Light and dark theme support
+- Socket reconnection handling
+- Analytics integration
+
+---
+
+## @Run Development Server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+````
+
+Open:
+
+```
+http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## @Environment Variables
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Create a `.env.local` file:
 
-## Learn More
+```env
+NEXT_PUBLIC_BACKEND_URL=https://backend.com(mock)
+```
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## @Deployment
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+The frontend is deployed on **Vercel**.
 
-## Deploy on Vercel
+```bash
+npm run build
+npm run start
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+-----
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## @Author
+
+Ahan Ghosh
+
+````
