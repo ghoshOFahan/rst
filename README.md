@@ -1,16 +1,15 @@
-````md
 # RST – Real-Time Word Chain Game (Frontend)
 
 Repository: https://github.com/ghoshOFahan/rst  
-Live Deployment: https://rst.vercel.app
+Live Deployment: https://rst.ahanghosh.site
 
 ---
 
 ## @Overview
 
-RST is a real-time multiplayer word-chain game frontend built with **Next.js (App Router)**.  
-The frontend is responsible for user interaction, UI state management, theming, and real-time communication with the backend server via Socket.IO.  
-All game authority, validation, and turn logic are strictly enforced by the backend.
+RST is a real-time multiplayer word-chain game built with **Next.js (App Router)**.  
+The frontend handles user interaction, UI state, theming, and real-time communication with the backend server using Socket.IO.  
+All game authority, validation, and turn logic are enforced exclusively by the backend.
 
 ---
 
@@ -33,8 +32,8 @@ All game authority, validation, and turn logic are strictly enforced by the back
 
 ### @Socket Management
 
-A **Socket.IO Singleton pattern** is used to prevent connection floods and duplicated socket connections.  
-A global `SocketProvider` wraps the application and manages all socket lifecycle events.
+The frontend uses a **Socket.IO Singleton pattern** to avoid connection floods and duplicate socket connections.  
+A global `SocketProvider` wraps the application and manages the socket lifecycle.
 
 ### @Global State
 
@@ -45,7 +44,7 @@ Zustand acts as the **single source of truth** for:
 - AI thinking state
 - Room lifecycle and transitions
 
-All UI updates react exclusively to server-emitted events such as `gameStateUpdate`.
+All UI updates are driven only by server-emitted events such as `gameStateUpdate`.
 
 ---
 
@@ -53,13 +52,13 @@ All UI updates react exclusively to server-emitted events such as `gameStateUpda
 
 ### @Lobby Phase
 
-- Create a room or join via Room ID
+- Create a room or join using a Room ID
 - Display connected players
 - Automatically transition when server conditions are met
 
 ### @Game Room Phase
 
-- Server-driven UI states
+- Fully server-driven UI
 - Waiting, Playing, and Finished phases handled dynamically
 
 ---
@@ -70,7 +69,7 @@ The input system is defensive and server-respecting:
 
 - Disabled when it is not the player’s turn
 - Disabled while AI evaluation is running
-- Protected against double submissions (click + enter)
+- Protected against double submissions (Enter + Click)
 - Mobile-safe interaction handling
 
 The frontend never decides game outcomes.
@@ -93,7 +92,6 @@ The frontend never decides game outcomes.
 ```bash
 npm run dev
 ```
-````
 
 Open:
 
@@ -108,7 +106,7 @@ http://localhost:3000
 Create a `.env.local` file:
 
 ```env
-NEXT_PUBLIC_BACKEND_URL=https://rst-backend.onrender.com
+NEXT_PUBLIC_BACKEND_URL=https://backend.com(mock)
 ```
 
 ---
@@ -127,3 +125,7 @@ npm run start
 ## @Author
 
 Ahan Ghosh
+
+```
+
+```
