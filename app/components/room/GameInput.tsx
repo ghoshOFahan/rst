@@ -61,7 +61,7 @@ export default function GameInput() {
     socket?.emit("submitWord", {
       roomId: gameState.roomId,
       word: value.trim(),
-      playerId: getClientId,
+      playerId: getClientId(),
     });
 
     setValue("");
