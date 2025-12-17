@@ -132,9 +132,7 @@ export default function Home() {
     <div className="relative min-h-screen flex flex-col justify-center items-center overflow-hidden">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,var(--color-purple)_0%,transparent_70%)] blur-3xl opacity-30"></div>
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_right,var(--color-pink)_0%,transparent_70%)] blur-3xl opacity-30"></div>
-      <Suspense fallback={null}>
-        <InvitePeople onInviteFound={handleInvite} />
-      </Suspense>
+
       <div className="flex md:flex-row flex-col-reverse absolute top-8 right-8 gap-4">
         <ModeToggle mode={mode} setMode={setMode} />
         <ThemeToggle />
@@ -245,6 +243,9 @@ export default function Home() {
           </motion.div>
         )}
       </AnimatePresence>
+      <Suspense fallback={null}>
+        <InvitePeople onInviteFound={handleInvite} />
+      </Suspense>
     </div>
   );
 }
