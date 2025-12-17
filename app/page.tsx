@@ -1,15 +1,14 @@
 "use client";
-import { useSearchParams } from "next/navigation";
 import ThemeToggle from "./components/ThemeToggle";
 import ModeToggle from "./components/ModeToggle";
 import socket from "./lib/socket";
 import type { GameState } from "./types/game";
 import { userGamestore } from "./store/userGamestore";
-import { useState, useEffect } from "react";
+import { Suspense, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence, Variants } from "framer-motion";
 import { playClickSound } from "./components/ModeToggle";
-export const dynamic = "force-dynamic";
+import InvitePeople from "./components/room/InvitePeople";
 const getClientId = () => {
   let id = localStorage.getItem("clientId");
   if (!id) {
@@ -25,15 +24,11 @@ export default function Home() {
   const [roomId, SetRoomId] = useState("");
   const { gameState, setGameState } = userGamestore();
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const inviteRoomId = searchParams.get("room");
 
-  useEffect(() => {
-    if (inviteRoomId) {
-      SetRoomId(inviteRoomId);
-      setMode("join");
-    }
-  }, [inviteRoomId]);
+  const handleInvite = (id: string) => {
+    SetRoomId(id);
+    setMode("join");
+  };
   useEffect(() => {
     const handler = (state: GameState) => {
       setGameState(state);
@@ -137,7 +132,9 @@ export default function Home() {
     <div className="relative min-h-screen flex flex-col justify-center items-center overflow-hidden">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,var(--color-purple)_0%,transparent_70%)] blur-3xl opacity-30"></div>
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_right,var(--color-pink)_0%,transparent_70%)] blur-3xl opacity-30"></div>
-
+      <Suspense fallback={null}>
+        <InvitePeople onInviteFound={handleInvite} />
+      </Suspense>
       <div className="flex md:flex-row flex-col-reverse absolute top-8 right-8 gap-4">
         <ModeToggle mode={mode} setMode={setMode} />
         <ThemeToggle />
