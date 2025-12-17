@@ -5,6 +5,7 @@ import { userGamestore } from "@/app/store/userGamestore";
 import socket from "@/app/lib/socket";
 export default function GameInput() {
   const [value, setValue] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const gameState = userGamestore((s) => s.gameState);
 
   const currentPlayerId = gameState?.currentPlayerId;
@@ -41,26 +42,38 @@ export default function GameInput() {
     return true;
   };
   const handleSubmit = async () => {
+    if (isSubmitting) return;
     if (!value.trim() || disabled || !gameState) return;
-    if (!wordCheck(value)) {
-      alert("Invalid word format");
-      return;
-    }
-    const exists = await dictCheck(value);
-    if (!exists) {
-      alert("Word not found in dictionary");
-      return;
-    }
-    socket?.emit("submitWord", {
-      roomId: gameState.roomId,
-      word: value.trim(),
-    });
 
-    setValue("");
+    setIsSubmitting(true);
+
+    try {
+      if (!wordCheck(value)) {
+        alert("Invalid word format");
+        return;
+      }
+
+      const exists = await dictCheck(value);
+      if (!exists) {
+        alert("Word not found in dictionary");
+        return;
+      }
+
+      socket.emit("submitWord", {
+        roomId: gameState.roomId,
+        word: value.trim(),
+      });
+
+      setValue("");
+    } finally {
+      setTimeout(() => setIsSubmitting(false), 500);
+    }
   };
-
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter") handleSubmit();
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault(); //
+      handleSubmit();
+    }
   };
   return (
     <div className="mt-6 flex flex-col sm:flex-row gap-3 w-full max-w-md">
