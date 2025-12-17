@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import SocketProvider from "./providers/socketProvider";
 import { ThemeProvider } from "next-themes";
+import { Analytics } from "@vercel/analytics/next";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,6 +36,7 @@ export default function RootLayout({
         <ThemeProvider attribute="data-theme" defaultTheme="dracula">
           <SocketProvider>{children}</SocketProvider>
         </ThemeProvider>
+        <Analytics />
       </body>
     </html>
   );
