@@ -100,7 +100,7 @@ export default function GameInput() {
         className={`px-4 py-2 rounded-lg font-semibold transition-all ${
           disabled
             ? "bg-comment/20 text-comment cursor-not-allowed"
-            : "bg-purple hover:bg-purple/80 text-white cursor-pointer"
+            : "bg-purple hover:bg-purple/80 text-fg dark:text-white cursor-pointer"
         }`}
         disabled={disabled}
       >
