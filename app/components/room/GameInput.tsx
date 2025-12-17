@@ -3,22 +3,15 @@
 import { useState } from "react";
 import { userGamestore } from "@/app/store/userGamestore";
 import socket from "@/app/lib/socket";
-const getClientId = () => {
-  let id = localStorage.getItem("clientId");
-  if (!id) {
-    id = `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
-    localStorage.setItem("clientId", id);
-  }
-  return id;
-};
 export default function GameInput() {
   const [value, setValue] = useState("");
   const gameState = userGamestore((s) => s.gameState);
-  const myClientId = getClientId();
 
   const currentPlayerId = gameState?.currentPlayerId;
+  const mySocketId = socket.id;
+
   const isMyTurn =
-    currentPlayerId && myClientId ? currentPlayerId === myClientId : false;
+    currentPlayerId && mySocketId ? currentPlayerId === mySocketId : false;
 
   const isAiThinking = gameState?.isAiThinking ?? false;
 
@@ -61,7 +54,6 @@ export default function GameInput() {
     socket?.emit("submitWord", {
       roomId: gameState.roomId,
       word: value.trim(),
-      playerId: getClientId(),
     });
 
     setValue("");

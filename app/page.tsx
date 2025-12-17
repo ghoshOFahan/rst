@@ -60,7 +60,7 @@ export default function Home() {
     const lastRoomId = localStorage.getItem("lastRoomId");
 
     const onConnect = () => {
-      if (!gameState && lastSocketId && lastRoomId) {
+      if (!gameState && lastRoomId) {
         console.log(
           "Socket connected and requesting reconnection for socketID:",
           lastSocketId
