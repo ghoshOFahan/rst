@@ -16,8 +16,6 @@ export default function GameRoom() {
       </div>
     );
 
-  const { roomId } = gameState;
-
   return (
     <div className="flex flex-col min-h-screen w-full text-fg">
       <main className="flex flex-1 flex-col md:flex-row p-4 md:p-8 gap-6 md:gap-8">
@@ -30,7 +28,7 @@ export default function GameRoom() {
           <CurrentPlayerHighlight />
 
           <h1 className="text-3xl md:text-6xl font-bold text-fg tracking-wider mt-4 md:mt-6 text-center">
-            get set rst
+            Get Set rst !
           </h1>
 
           <GameInput />
