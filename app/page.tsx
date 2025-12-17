@@ -1,5 +1,5 @@
 "use client";
-
+import { useSearchParams } from "next/navigation";
 import ThemeToggle from "./components/ThemeToggle";
 import ModeToggle from "./components/ModeToggle";
 import socket from "./lib/socket";
@@ -24,7 +24,15 @@ export default function Home() {
   const [roomId, SetRoomId] = useState("");
   const { gameState, setGameState } = userGamestore();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const inviteRoomId = searchParams.get("room");
 
+  useEffect(() => {
+    if (inviteRoomId) {
+      SetRoomId(inviteRoomId);
+      setMode("join");
+    }
+  }, [inviteRoomId]);
   useEffect(() => {
     const handler = (state: GameState) => {
       setGameState(state);

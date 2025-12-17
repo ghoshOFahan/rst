@@ -24,7 +24,6 @@ export default function WaitingLobby({
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
       console.error("Failed to copy:", err);
-      // Fallback: show error to user
       alert("Failed to copy invite link");
     }
   };
