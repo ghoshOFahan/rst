@@ -1,6 +1,5 @@
 # RST – Real-Time Word Chain Game (Frontend)
 
-Repository: https://github.com/ghoshOFahan/rst  
 Live Deployment: https://rst.ahanghosh.site
 
 ---
@@ -126,6 +125,3 @@ npm run start
 
 Ahan Ghosh
 
-```
-
-```
