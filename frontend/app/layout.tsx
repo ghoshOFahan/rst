@@ -1,9 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import SocketProvider from "./providers/socketProvider";
-import { ThemeProvider } from "next-themes";
 import { Analytics } from "@vercel/analytics/next";
+import { ThemeProvider } from "next-themes";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -14,12 +13,14 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
+
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
 };
+
 export const metadata: Metadata = {
-  title: "RST — Real-Time Word Game",
+  title: "Identity Engine",
   description: "A real-time multiplayer word-chain game with AI judging",
 };
 
@@ -33,9 +34,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ThemeProvider attribute="data-theme" defaultTheme="dracula">
-          <SocketProvider>{children}</SocketProvider>
-        </ThemeProvider>
+        <ThemeProvider>{children}</ThemeProvider>
         <Analytics />
       </body>
     </html>
