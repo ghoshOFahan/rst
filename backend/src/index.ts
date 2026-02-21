@@ -13,6 +13,7 @@ app.use(
     credentials: true,
   }),
 );
+
 app.get("/", (req: Request, res: Response) => {
   res.send(`<h1>hey there welcome to KnowMore!</h1>`);
 });
