@@ -13,7 +13,7 @@ app.use(
     credentials: true,
   }),
 );
-
+app.post("/onboarding", (req: Request, res: Response) => {});
 app.get("/", (req: Request, res: Response) => {
   res.send(`<h1>hey there welcome to KnowMore!</h1>`);
 });

@@ -6,7 +6,7 @@ if (!process.env.GEMINI_API_KEY) {
 }
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
 const model = genAI.getGenerativeModel({
-  model: "text-embedding-004",
+  model: "text-embedding-001",
 });
 //768-d vector
 export async function embedWord(word: string): Promise<number[]> {
@@ -27,6 +27,7 @@ export async function getEmbeddings(words: string[]): Promise<number[][]> {
   const promises = words.map((word) => embedWord(word));
   return Promise.all(promises);
 }
+
 export function cosineSimilarity(a: number[], b: number[]): number {
   if (a.length !== b.length) {
     throw new Error("Vectors must be the same length.");

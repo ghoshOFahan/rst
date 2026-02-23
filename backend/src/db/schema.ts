@@ -1,5 +1,4 @@
-import type { AnyPgColumn } from "drizzle-orm/pg-core";
-import { pgEnum, pgTable as table, primaryKey } from "drizzle-orm/pg-core";
+import { pgTable as table, primaryKey } from "drizzle-orm/pg-core";
 import * as t from "drizzle-orm/pg-core";
 
 export const users = table("users", {
@@ -20,7 +19,7 @@ export const sessions = table("sessions", {
 export const topics = table("topics", {
   id: t.integer().primaryKey().generatedAlwaysAsIdentity(),
   name: t.varchar({ length: 256 }).notNull().unique(),
-  embeddingVector: t.vector({ dimensions: 256 }).notNull(),
+  embeddingVector: t.vector({ dimensions: 768 }).notNull(),
   createdAt: t.timestamp().defaultNow().notNull(),
 });
 export const topicAnchors = table(
