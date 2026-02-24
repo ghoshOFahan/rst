@@ -3,6 +3,7 @@ import Navbar from "./components/Navbar";
 import { motion } from "framer-motion";
 import { ArrowRight, Brain, Zap, Fingerprint } from "lucide-react";
 import Link from "next/link";
+import { authClient } from "./authClient";
 
 export default function LandingPage() {
   return (
@@ -37,12 +38,12 @@ export default function LandingPage() {
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link
-                href="/login" // Or /dashboard if doing mocked auth
+              <button
+                onClick={() => authClient.signIn.social({ provider: "google" })} // Or /dashboard if doing mocked auth
                 className="w-full sm:w-auto px-8 py-4 rounded-xl bg-(--color-fg) text-(--color-bg) font-bold text-lg hover:scale-105 transition-transform flex items-center justify-center gap-2"
               >
                 Start Profiling <ArrowRight size={20} />
-              </Link>
+              </button>
               <Link
                 href="/about"
                 className="w-full sm:w-auto px-8 py-4 rounded-xl border border-(--color-line) text-(--color-fg) font-medium hover:bg-(--color-line)/50 transition-colors"
