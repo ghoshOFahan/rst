@@ -23,6 +23,8 @@
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
     "@types/node": "^24.9.2",
+    "better-auth": "^1.4.19",
+    "bullmq": "^5.70.1",
     "compute-cosine-similarity": "^1.1.0",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",

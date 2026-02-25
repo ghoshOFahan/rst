@@ -1,26 +1,50 @@
 import "dotenv/config";
 import express from "express";
 import cors from "cors";
-import type { Request, Response } from "express";
-export const app = express();
 import { createServer } from "http";
+import { Queue } from "bullmq";
+import { Redis } from "ioredis";
+import { auth } from "./auth.js";
+import { toNodeHandler } from "better-auth/node";
+
+// Import API routes and Socket initialization
+import apiRoutes from "./routes/routes.js";
+import { initSocket } from "./controllers/socket_controller.js";
+
+import "./worker/analyzer.js";
+export const app = express();
 const httpServer = createServer(app);
 const port: number = parseInt(process.env.PORT || "4000", 10);
 const host = "0.0.0.0";
+app.use(express.json()); // Required to parse req.body for REST endpoints
 app.use(
   cors({
     origin: process.env.FRONTEND_URL,
     credentials: true,
   }),
 );
-app.post("/onboarding", (req: Request, res: Response) => {});
-app.get("/", (req: Request, res: Response) => {
+app.use("/api/auth", toNodeHandler(auth));
+
+// Setup BullMQ Queue globally so controllers can push to it
+const redisConnection = new Redis(process.env.REDIS_URL as string);
+export const analyticsQueue = new Queue("identity-analyzer", {
+  connection: redisConnection,
+});
+
+// Mount the REST API
+app.use("/api", apiRoutes);
+
+app.get("/", (req, res) => {
   res.send(`<h1>hey there welcome to KnowMore!</h1>`);
 });
+
+// Mount the Socket.io Server
+initSocket(httpServer, analyticsQueue);
+
 httpServer.listen(port, host, () => {
   if (process.env.PORT) {
-    console.log("service is live and listening on port %d", port);
+    console.log("Service is live and listening on port %d", port);
   } else {
-    console.log("you can access the page locally at http://localhost:%d", port);
+    console.log("You can access the page locally at http://localhost:%d", port);
   }
 });
