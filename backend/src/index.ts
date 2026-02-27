@@ -14,17 +14,20 @@ import { initSocket } from "./controllers/socket_controller.js";
 import "./worker/analyzer.js";
 export const app = express();
 const httpServer = createServer(app);
-const port: number = parseInt(process.env.PORT || "4000", 10);
+const port: number = parseInt(process.env.PORT || "3001", 10);
 const host = "0.0.0.0";
 app.use(express.json()); // Required to parse req.body for REST endpoints
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL,
+    origin: "http://localhost:3000",
     credentials: true,
   }),
 );
 app.use("/api/auth", toNodeHandler(auth));
-
+app.use((req, res, next) => {
+  console.log("Incoming:", req.method, req.url);
+  next();
+});
 // Setup BullMQ Queue globally so controllers can push to it
 const redisConnection = new Redis(process.env.REDIS_URL as string);
 export const analyticsQueue = new Queue("identity-analyzer", {

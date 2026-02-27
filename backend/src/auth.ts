@@ -7,6 +7,8 @@ import * as schema from "./db/schema.js";
 export const auth = betterAuth({
   baseURL: process.env.BETTER_AUTH_URL,
   secret: process.env.BETTER_AUTH_SECRET!,
+  baseRedirectURI: process.env.FRONTEND_URL,
+  trustHost: true,
   database: drizzleAdapter(db, {
     provider: "pg",
     schema,
@@ -20,6 +22,6 @@ export const auth = betterAuth({
   },
   emailAndPassword: {
     enabled: true,
-    autoSignIn: false, //defaults to true
+    autoSignIn: true,
   },
 });
