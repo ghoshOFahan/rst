@@ -3,9 +3,15 @@ import Link from "next/link";
 import { User, LogOut } from "lucide-react";
 import { motion } from "framer-motion";
 import ThemeToggle from "./ThemeToggle";
-
+import { authClient } from "../auth/authClient";
+const { useSession, signOut } = authClient;
+const handleLogout = async () => {
+  await signOut();
+};
 export default function Navbar() {
-  const isAuthenticated = true;
+  const { data: session, isPending } = useSession();
+  if (isPending) return null;
+  const isAuthenticated = !!session;
 
   return (
     <motion.nav
@@ -38,9 +44,12 @@ export default function Navbar() {
               <div className="w-8 h-8 rounded-full bg-(--color-line) flex items-center justify-center border border-(--color-line)">
                 <User size={16} />
               </div>
-              <span>PlayerOne</span>
+              <span>{session?.user?.name}</span>
             </Link>
-            <button className="text-(--color-comment) hover:text-(--color-red) transition-colors">
+            <button
+              className="text-(--color-comment) hover:text-(--color-red) transition-colors"
+              onClick={handleLogout}
+            >
               <LogOut size={20} />
             </button>
           </div>

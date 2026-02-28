@@ -3,8 +3,14 @@ import Navbar from "./components/Navbar";
 import { motion } from "framer-motion";
 import { ArrowRight, Brain, Zap, Fingerprint } from "lucide-react";
 import Link from "next/link";
-import { authClient } from "./authClient";
-
+import { authClient } from "./auth/authClient";
+const handleGoogleLogin = async () => {
+  await authClient.signIn.social({
+    provider: "google",
+    callbackURL: `${window.location.origin}/dashboard`,
+    errorCallbackURL: `${window.location.origin}/login?error=google`,
+  });
+};
 export default function LandingPage() {
   return (
     <div className="min-h-screen bg-(--color-bg) text-(--color-fg) overflow-hidden">
@@ -39,10 +45,10 @@ export default function LandingPage() {
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <button
-                onClick={() => authClient.signIn.social({ provider: "google" })} // Or /dashboard if doing mocked auth
+                onClick={handleGoogleLogin} // Or /dashboard if doing mocked auth
                 className="w-full sm:w-auto px-8 py-4 rounded-xl bg-(--color-fg) text-(--color-bg) font-bold text-lg hover:scale-105 transition-transform flex items-center justify-center gap-2"
               >
-                Start Profiling <ArrowRight size={20} />
+                Sign up with Google <ArrowRight size={20} />
               </button>
               <Link
                 href="/about"
